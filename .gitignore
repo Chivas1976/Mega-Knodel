@@ -1,0 +1,42 @@
+# Build-Ordner
+bin/
+obj/
+
+# User-spezifische Dateien
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+
+# Logs
+*.log
+
+# Temporäre Dateien
+*.tmp
+*.temp
+
+# Kompilierte DLLs
+*.dll
+*.exe
+*.pdb
+
+# Backup-Dateien
+*.bak
+
+# Publish-Ordner
+publish/
