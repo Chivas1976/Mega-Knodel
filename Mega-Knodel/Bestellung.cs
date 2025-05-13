@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Mega_Knodel
 {
@@ -35,20 +36,56 @@ namespace Mega_Knodel
 
                 int.TryParse(Console.ReadLine(), out int auswahlMenu);
 
-                switch (auswahlMenu) {
+                switch (auswahlMenu)
+                {
                     case 1:
                         Console.Clear();
                         Menue.ZeigeProdukte();
 
                         AuswahlProdukt();
                         break;
+                    case 2:
+                        Console.Clear();
+                        Menue.ZeigeGetreanke();
+
+                        AuswahlGetraenk();
+                        break;
+                    case 3:
+                        Console.WriteLine("Programm wird beendet...");
+                        return;
                 }
             }
         }
 
         private void AuswahlProdukt()
         {
-            int.TryParse(Console.ReadLine(), out int auswahl);
+            Console.WriteLine($"[0] – Zurück");
+            bool istZahl = false;
+
+            do
+            {
+                istZahl = int.TryParse(Console.ReadLine(), out int auswahl);
+
+                if (auswahl > 0 && auswahl <= Menue.knoedelListe.Count && istZahl != false)
+                {
+                    this.ArtikelHinzufuegen(Menue.knoedelListe[auswahl - 1]);
+                    istZahl = true;
+                }
+                else if (auswahl == 0) istZahl = true;
+                else
+                {
+                    istZahl = false;
+                    int x = Console.GetCursorPosition().Left;
+                    int y = Console.GetCursorPosition().Top;
+
+                    Console.SetCursorPosition(x, y - 1);
+                    Console.WriteLine("                    ");
+                    Console.SetCursorPosition(x, y - 1);
+                }
+
+            }
+            while (istZahl == false);
+            /*
             switch (auswahl)
             {
                 case 1:
@@ -95,8 +132,59 @@ namespace Mega_Knodel
                     Console.WriteLine("Ungültige Auswahl. Bitte wählen Sie eine Zahl zwischen 1 und 10.");
                     break;
             }
-            
+            */
+
         }
+        private void AuswahlGetraenk()
+        {
+            Console.WriteLine($"[0] – Zurück");
+
+            bool istZahl = false;
+
+            do
+            {
+                istZahl = int.TryParse(Console.ReadLine(), out int auswahl);
+
+                if (auswahl > 0 && auswahl <= Menue.getraenkListe.Count && istZahl != false)
+                {
+                    this.ArtikelHinzufuegen(Menue.getraenkListe[auswahl - 1]);
+                    istZahl = true;
+                }
+                else if (auswahl == 0) istZahl = true;
+                else
+                {
+                    istZahl = false;
+                    int x = Console.GetCursorPosition().Left;
+                    int y = Console.GetCursorPosition().Top;
+
+                    Console.SetCursorPosition(x, y - 1);
+                    Console.WriteLine("                    ");
+                    Console.SetCursorPosition(x, y - 1);
+                }
+
+            }
+            while (istZahl == false);
+            /*
+                int.TryParse(Console.ReadLine(), out int auswahl);
+
+                var getraenkListe = new Menue().getraenkListe;
+
+                if (auswahl >= 1 && auswahl <= getraenkListe.Count)
+                {
+                    var gewaehltesGetraenk = getraenkListe[auswahl - 1];
+                    Console.WriteLine($"Sie haben {gewaehltesGetraenk.Name} gewählt.");
+                    ArtikelHinzufuegen(gewaehltesGetraenk); // Dodaj u porudžbinu
+                }
+                else
+                {
+                    Console.WriteLine("Ungültige Auswahl. Bitte erneut versuchen.");
+                }
+
+                Console.WriteLine("\nDrücken Sie eine Taste, um fortzufahren...");
+                Console.ReadKey();
+            */
+        }
+
 
         public void ZeigeBestellung()
         {
