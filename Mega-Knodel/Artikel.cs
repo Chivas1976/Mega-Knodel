@@ -8,6 +8,7 @@ namespace Mega_Knodel
 {
     internal class Artikel
     {
+
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Preis { get; set; }
@@ -19,9 +20,9 @@ namespace Mega_Knodel
             Preis = preis;
         }
 
-        public void ZeigeInfo()
+        public string ZeigeInfo()
         {
-            Console.WriteLine($"[{Id}] {Name} – {Preis} Euro");
+           return $"{Name} – {Preis} Euro";
         }
     }
 }
