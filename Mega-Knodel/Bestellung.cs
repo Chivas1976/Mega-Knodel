@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Text.Json; // Für JSON-Funktionen
+using System.IO;        // Für Dateioperationen
 
 namespace Mega_Knodel
 {
     internal class Bestellung
     {
         public List<Artikel> ArtikelListe { get; set; } = new List<Artikel>();
+
         public DateTime Datum { get; set; } = DateTime.Now;
 
         public void ArtikelHinzufuegen(Artikel artikel)
         {
-            ArtikelListe.Add(artikel);
+            if (artikel.Menge > 0)
+            {
+                Artikel ware = new Artikel(artikel.Id, artikel.Name, artikel.Preis, 1);
+
+                ArtikelListe.Add(ware);
+
+                artikel.MengeAendern();
+            }
+
+
         }
 
         public void HauptMenu()
@@ -23,14 +36,14 @@ namespace Mega_Knodel
             {
                 Console.Clear();
 
-                Console.WriteLine("===== Hauptmenü =====");
+                Console.WriteLine("===== Bestellung =====");
                 Console.WriteLine("1. Produkt aufgeben");
                 Console.WriteLine("2. Getränk aufgeben");
                 Console.WriteLine("3. Beenden");
                 if (ArtikelListe.Count != 0)
                 {
                     Console.WriteLine("4. Kauf");
-
+                    Console.WriteLine("5. Artikel löschen");
                     ZeigeBestellung();
                 }
 
@@ -53,6 +66,26 @@ namespace Mega_Knodel
                     case 3:
                         Console.WriteLine("Programm wird beendet...");
                         return;
+
+                    case 4:
+                        if (ArtikelListe.Count != 0)
+                        {
+                            Console.Clear();
+                            ZeigeBestellung();
+                            Console.WriteLine("\nDrücken Sie eine Taste zum Zurückkhehren...");
+                            Console.ReadKey();
+                        }
+                        return;
+                    case 5:
+                        if (ArtikelListe.Count != 0)
+                        {
+                            Console.Clear();
+                            ArtikelEntfernen();
+
+                        }
+
+                        break;
+
                 }
             }
         }
@@ -64,22 +97,50 @@ namespace Mega_Knodel
 
             do
             {
+               istZahl = false;
+
                 istZahl = int.TryParse(Console.ReadLine(), out int auswahl);
 
-                if (auswahl > 0 && auswahl <= Menue.knoedelListe.Count && istZahl != false)
+                if (auswahl > 0 && auswahl <= Menue.knoedelListe.Count && istZahl != false && Menue.knoedelListe[auswahl - 1].Menge != 0)
                 {
+
                     this.ArtikelHinzufuegen(Menue.knoedelListe[auswahl - 1]);
+
+    
                     istZahl = true;
                 }
-                else if (auswahl == 0) istZahl = true;
-                else
+                else if (auswahl > 0 && auswahl <= Menue.knoedelListe.Count && istZahl != false && Menue.knoedelListe[auswahl - 1].Menge == 0)
                 {
-                    istZahl = false;
                     int x = Console.GetCursorPosition().Left;
                     int y = Console.GetCursorPosition().Top;
 
                     Console.SetCursorPosition(x, y - 1);
-                    Console.WriteLine("                    ");
+                    Console.WriteLine("                                                          ");
+                    Console.SetCursorPosition(x, y - 1);
+
+                    
+
+                    Console.Write($"{Menue.knoedelListe[auswahl - 1].Name} ist leider aus.");
+
+                    Thread.Sleep(2000);
+
+                    Console.SetCursorPosition(x, y - 1);
+                    Console.WriteLine("                                                          ");
+                    Console.SetCursorPosition(x, y - 1);
+                    
+                    istZahl = false;
+                }
+                else if (auswahl == 0 && istZahl!=false) istZahl = true;
+                else
+                {
+                    int x = Console.GetCursorPosition().Left;
+                    int y = Console.GetCursorPosition().Top;
+
+                    istZahl = false;
+
+
+                    Console.SetCursorPosition(x, y - 1);
+                    Console.WriteLine("                                                   ");
                     Console.SetCursorPosition(x, y - 1);
                 }
 
@@ -143,14 +204,40 @@ namespace Mega_Knodel
 
             do
             {
+                istZahl = false;
+
                 istZahl = int.TryParse(Console.ReadLine(), out int auswahl);
 
-                if (auswahl > 0 && auswahl <= Menue.getraenkListe.Count && istZahl != false)
+                if (auswahl > 0 && auswahl <= Menue.getraenkListe.Count && istZahl != false && Menue.getraenkListe[auswahl - 1].Menge != 0)
                 {
+
                     this.ArtikelHinzufuegen(Menue.getraenkListe[auswahl - 1]);
+
+
                     istZahl = true;
                 }
-                else if (auswahl == 0) istZahl = true;
+                else if (auswahl > 0 && auswahl <= Menue.getraenkListe.Count && istZahl != false && Menue.getraenkListe[auswahl - 1].Menge == 0)
+                {
+                    int x = Console.GetCursorPosition().Left;
+                    int y = Console.GetCursorPosition().Top;
+
+                    Console.SetCursorPosition(x, y - 1);
+                    Console.WriteLine("                                                          ");
+                    Console.SetCursorPosition(x, y - 1);
+
+
+
+                    Console.Write($"{Menue.getraenkListe[auswahl - 1].Name} ist leider aus.");
+
+                    Thread.Sleep(2000);
+
+                    Console.SetCursorPosition(x, y - 1);
+                    Console.WriteLine("                                                          ");
+                    Console.SetCursorPosition(x, y - 1);
+
+                    istZahl = false;
+                }
+                else if (auswahl == 0 && istZahl!=false) istZahl = true;
                 else
                 {
                     istZahl = false;
@@ -190,12 +277,47 @@ namespace Mega_Knodel
         {
             Console.WriteLine($"\nBestellung vom {Datum.ToShortDateString()}");
             decimal summe = 0;
-            foreach (var artikel in ArtikelListe)
+
+            for (int i = 0; i < ArtikelListe.Count; i += 1)
             {
-                artikel.ZeigeInfo();
-                summe += artikel.Preis;
+                Console.WriteLine($"[{i + 1}] - {ArtikelListe[i].ZeigeInfo()}");
+                summe += ArtikelListe[i].Preis;
             }
             Console.WriteLine($"Gesamtsumme: {summe} Euro");
         }
+        public void ArtikelEntfernen()
+        {
+            Console.WriteLine("Bitte wählen Sie den Artikel, den Sie entfernen möchten:");
+            ZeigeBestellung();
+            int.TryParse(Console.ReadLine(), out int auswahl);
+            if (auswahl > 0 && auswahl <= ArtikelListe.Count)
+            {
+                ArtikelListe.RemoveAt(auswahl - 1);
+                Console.WriteLine("Artikel wurde entfernt.");
+            }
+            else
+            {
+                Console.WriteLine("Ungültige Auswahl.");
+            }
+        }
+        public void Speichern(string dateiPfad = "bestellung.json")
+        {
+            // Serialisiert die Bestellung in JSON
+            string json = JsonSerializer.Serialize(this);
+
+            // Speichert JSON in eine Datei
+            File.WriteAllText(dateiPfad, json);
+
+            Console.WriteLine($"Bestellung wurde gespeichert: {dateiPfad}");
+        }
+        public static Bestellung Laden(string dateiPfad = "bestellung.json")
+        {
+            // Liest JSON aus der Datei
+            string json = File.ReadAllText(dateiPfad);
+
+            // Konvertiert JSON zurück in ein Bestellung-Objekt
+            return JsonSerializer.Deserialize<Bestellung>(json);
+        }
     }
+
 }
