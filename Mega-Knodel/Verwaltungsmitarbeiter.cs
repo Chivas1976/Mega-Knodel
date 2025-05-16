@@ -29,8 +29,8 @@ namespace Mega_Knodel
                 //   Console.WriteLine("1. Mitarbeiter bearbeiten");
                 // Console.WriteLine("2. Mitarbeiter löschen");
                 Console.WriteLine("1. Speisekarte anzeigen");
-
-                Console.WriteLine("2. Beenden");
+                Console.WriteLine("2. Bestellungen zeigen");
+                Console.WriteLine("3. Beenden");
 
                 Console.Write("Ihre Auswahl: ");
 
@@ -46,6 +46,11 @@ namespace Mega_Knodel
 
                         break;
                     case 2:
+                        Console.Clear();
+                        Bestellung.Laden();
+                        Console.ReadLine();
+                        break;
+                    case 3:
                         Console.Clear();
 
                         return; ;
@@ -161,7 +166,7 @@ namespace Mega_Knodel
                 }
             } while (ueberpruefen == false);
 
-            produkt.Preisändern(Math.Round(neuerPreis, 2));
+            produkt.PreisAendern(Math.Round(neuerPreis, 2));
         }
 
         /*
