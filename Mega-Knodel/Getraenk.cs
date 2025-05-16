@@ -8,7 +8,7 @@ namespace Mega_Knodel
 {
     internal class Getraenk : Artikel
     {
-            public Getraenk(int id, string name, decimal preis) : base(id, name, preis)
+            public Getraenk(int id, string name, decimal preis, int menge) : base(id, name, preis, menge)
             {
 
             }
