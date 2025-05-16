@@ -15,6 +15,7 @@ namespace Mega_Knodel
         public List<Artikel> ArtikelListe { get; set; } = new List<Artikel>();
 
         public DateTime Datum { get; set; } = DateTime.Now;
+        public decimal Gesamtpreis { get; set; } = 0;
 
         public void ArtikelHinzufuegen(Artikel artikel)
         {
@@ -23,8 +24,6 @@ namespace Mega_Knodel
                 Artikel ware = new Artikel(artikel.Id, artikel.Name, artikel.Preis, 1);
 
                 ArtikelListe.Add(ware);
-
-                artikel.MengeAendern();
             }
 
 
@@ -73,6 +72,7 @@ namespace Mega_Knodel
                             Console.Clear();
                             ZeigeBestellung();
                             Console.WriteLine("\nDrücken Sie eine Taste zum Zurückkhehren...");
+                            Speichern();
                             Console.ReadKey();
                         }
                         return;
@@ -276,14 +276,14 @@ namespace Mega_Knodel
         public void ZeigeBestellung()
         {
             Console.WriteLine($"\nBestellung vom {Datum.ToShortDateString()}");
-            decimal summe = 0;
+         
 
             for (int i = 0; i < ArtikelListe.Count; i += 1)
             {
                 Console.WriteLine($"[{i + 1}] - {ArtikelListe[i].ZeigeInfo()}");
-                summe += ArtikelListe[i].Preis;
+                this.Gesamtpreis += ArtikelListe[i].Preis;
             }
-            Console.WriteLine($"Gesamtsumme: {summe} Euro");
+            Console.WriteLine($"Gesamtsumme: {this.Gesamtpreis} Euro");
         }
         public void ArtikelEntfernen()
         {
@@ -299,24 +299,42 @@ namespace Mega_Knodel
             {
                 Console.WriteLine("Ungültige Auswahl.");
             }
+            
         }
+
+       
         public void Speichern(string dateiPfad = "bestellung.json")
         {
             // Serialisiert die Bestellung in JSON
-            string json = JsonSerializer.Serialize(this);
 
-            // Speichert JSON in eine Datei
-            File.WriteAllText(dateiPfad, json);
+
+            var auszugsDaten = new
+            {
+       
+                Gesamtpreis = this.Gesamtpreis,
+                Datum = this.Datum
+            }; 
+
+            using (var writer = new StreamWriter(dateiPfad, append: true))
+            {
+
+                string json = JsonSerializer.Serialize(auszugsDaten);
+                writer.WriteLine(json);
+            }
+
+                // Speichert JSON in eine Datei
+             
 
             Console.WriteLine($"Bestellung wurde gespeichert: {dateiPfad}");
         }
-        public static Bestellung Laden(string dateiPfad = "bestellung.json")
+        public static void Laden(string dateiPfad = "bestellung.json")
         {
             // Liest JSON aus der Datei
-            string json = File.ReadAllText(dateiPfad);
-
-            // Konvertiert JSON zurück in ein Bestellung-Objekt
-            return JsonSerializer.Deserialize<Bestellung>(json);
+            foreach (var line in File.ReadLines(dateiPfad))
+            {
+                var auszugsDaten = JsonSerializer.Deserialize<Bestellung>(line);
+                Console.WriteLine($"Datum: {auszugsDaten.Datum} - Summe: {auszugsDaten.Gesamtpreis}");
+            }
         }
     }
 
