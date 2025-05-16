@@ -13,9 +13,6 @@ namespace Mega_Knodel
         public Produkt(int id, string name, decimal preis, int menge) : base(id, name, preis,menge)
         {
             
-        }
-
-       
-       
+        }   
     }
 }
