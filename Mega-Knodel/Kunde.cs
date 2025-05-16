@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Mega_Knodel
 {
     internal class Kunde
-    {
+    {/*
         public void SpeisekarteAnzeigen()
         {
             Menue menü = new Menue();
            // menü.ZeigeMenü();
         }
-
+        */
         public void BestellungAufgeben(Bestellung bestellung)
         {
             bestellung.HauptMenu();
