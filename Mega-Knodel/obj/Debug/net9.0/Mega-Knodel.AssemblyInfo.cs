@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mega-Knodel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a31014ce73fdecfe5d82c2dbfa9893ca12a3beff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bc9442a81f8e5816c5ad2f5b0fd1f004cd2474c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mega-Knodel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mega-Knodel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

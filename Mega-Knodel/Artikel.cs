@@ -13,7 +13,6 @@ namespace Mega_Knodel
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Preis { get; set; }
-
         public int Menge { get; set; }
 
         public Artikel(int id, string name, decimal preis,int menge)
@@ -26,17 +25,17 @@ namespace Mega_Knodel
 
         public string ZeigeInfo()
         {
-           return $"{Name} – {Preis:F2} Euro | Menge: {Menge}";
+           return $"{Name} – {Preis:F2} Euro | Menge: {Menge}x";
         }
 
-        public void MengeAendern()
-        {
-            Menge -= 1;
-        }
-
-        public void Preisändern(decimal neuerPreis)
+        public void PreisAendern(decimal neuerPreis)
         {
             Preis = neuerPreis;
+        }
+
+        public Artikel() { 
+        
+           
         }
     }
 }
